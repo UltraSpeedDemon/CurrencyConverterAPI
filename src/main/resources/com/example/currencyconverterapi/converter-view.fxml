@@ -11,46 +11,39 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.currencyconverterapi.ConverterViewContoller">
    <children>
-      <BorderPane prefHeight="380.0" prefWidth="600.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane prefHeight="267.0" prefWidth="600.0" AnchorPane.bottomAnchor="133.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <bottom>
             <Label fx:id="outputLabel" text="OutputLabel" BorderPane.alignment="CENTER" />
          </bottom>
       </BorderPane>
-      <BorderPane layoutY="25.0" prefHeight="336.0" prefWidth="600.0" AnchorPane.bottomAnchor="98.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
-      <BorderPane layoutX="10.0" layoutY="111.0" prefHeight="205.0" prefWidth="580.0" AnchorPane.bottomAnchor="84.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="111.0">
+      <BorderPane layoutY="25.0" prefHeight="365.0" prefWidth="600.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
          <bottom>
-            <Button fx:id="convertButton" mnemonicParsing="false" prefHeight="22.0" prefWidth="128.0" text="Convert" BorderPane.alignment="CENTER" />
+            <Button fx:id="detailsButton" mnemonicParsing="false" onAction="#viewDetails" text="Exchange Details" BorderPane.alignment="CENTER" />
+         </bottom></BorderPane>
+      <BorderPane layoutX="10.0" layoutY="77.0" prefHeight="251.0" prefWidth="580.0" AnchorPane.bottomAnchor="72.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="77.0">
+         <bottom>
+            <Button fx:id="convertButton" mnemonicParsing="false" onAction="#convert" prefHeight="52.0" prefWidth="164.0" text="Convert" BorderPane.alignment="CENTER" />
          </bottom>
          <padding>
             <Insets top="10.0" />
          </padding>
          <center>
-            <Label prefHeight="48.0" prefWidth="23.0" text="&gt;" BorderPane.alignment="CENTER">
-               <font>
-                  <Font size="31.0" />
-               </font>
-            </Label>
-         </center>
-         <left>
-            <TextField fx:id="fromTextField" prefHeight="70.0" prefWidth="242.0" promptText="From" BorderPane.alignment="CENTER">
+            <TextField fx:id="amountTextField" prefHeight="70.0" prefWidth="440.0" promptText="Amount" BorderPane.alignment="CENTER">
                <padding>
                   <Insets top="2.0" />
                </padding>
             </TextField>
-         </left>
-         <right>
-            <TextField fx:id="toTextField" prefHeight="70.0" prefWidth="244.0" promptText="To" BorderPane.alignment="CENTER" />
-         </right>
+         </center>
       </BorderPane>
       <BorderPane layoutX="10.0" prefHeight="158.0" prefWidth="580.0" stylesheets="@style.css">
          <left>
-            <ComboBox fx:id="currency1ComboBox" prefHeight="41.0" prefWidth="243.0" promptText="USD" BorderPane.alignment="CENTER" />
+            <ComboBox fx:id="currencyFromComboBox" prefHeight="41.0" prefWidth="243.0" promptText="USD" BorderPane.alignment="CENTER" />
          </left>
          <right>
-            <ComboBox fx:id="currency2ComboBox" prefHeight="41.0" prefWidth="243.0" promptText="CAD" BorderPane.alignment="CENTER" />
+            <ComboBox fx:id="currencyToComboBox" prefHeight="41.0" prefWidth="243.0" promptText="CAD" BorderPane.alignment="CENTER" />
          </right>
          <top>
-            <Label text="Currency Converter" BorderPane.alignment="CENTER">
+            <Label id="header" text="Currency Converter" BorderPane.alignment="CENTER">
                <font>
                   <Font size="48.0" />
                </font>
