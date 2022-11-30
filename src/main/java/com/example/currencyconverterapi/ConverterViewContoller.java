@@ -10,6 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -40,6 +42,9 @@ public class ConverterViewContoller implements Initializable {
     private Button detailsButton;
 
     @FXML
+    private BorderPane exchangePane;
+
+    @FXML
     void viewDetails(ActionEvent event) throws IOException { //view details button to switch scenes
         Parent root = FXMLLoader.load(getClass().getResource("exchangedetails-view.fxml"));
 
@@ -51,14 +56,10 @@ public class ConverterViewContoller implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         outputLabel.setVisible(false); //makes the output label invisible until the user clicks the convert button
 
-        try{
-            APIUtility.getConverterFromRapidAPI();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        //make the button invisible until the user selects a currency
+        //detailsButton.setVisible(false);
     }
+
     /**
      * This method is called when the user clicks on the convert button
      */
@@ -69,20 +70,9 @@ public class ConverterViewContoller implements Initializable {
 
         //input api params
         APIResponse apiResponse = APIUtility.getConverterFromRapidAPI(amount, currencyFromComboBox.getValue().toString(), currencyToComboBox.getValue().toString());
-        if (apiResponse.resultsReturned())
-        {
+        if (apiResponse.resultsReturned()) {
             amountTextField.clear();
             outputLabel.setVisible(true); //sets output label to visible
-            Collections.sort(movies, new Comparator<Movie>() {
-                @Override
-                public int compare(Movie m1, Movie m2) {
-                    if (m2.getYear().compareTo(m1.getYear())==0)
-                        return (m1.getTitle().compareTo(m2.getTitle()));
-                    else
-                        return m2.getYear().compareTo(m1.getYear());
-                }
-            });
-            listView.getItems().addAll(movies);
         }
         else
         {
