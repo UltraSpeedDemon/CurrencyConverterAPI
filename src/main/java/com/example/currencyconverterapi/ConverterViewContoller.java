@@ -30,10 +30,10 @@ public class ConverterViewContoller implements Initializable {
     private Button convertButton;
 
     @FXML
-    private ComboBox<Converter> currencyFromComboBox;
+    private ComboBox<String> currencyFromComboBox;
 
     @FXML
-    private ComboBox<Converter> currencyToComboBox;
+    private ComboBox<String> currencyToComboBox;
 
     @FXML
     private Label outputLabel;
@@ -56,6 +56,18 @@ public class ConverterViewContoller implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         outputLabel.setVisible(false); //makes the output label invisible until the user clicks the convert button
 
+        //comboboxFROM choices
+        currencyFromComboBox.getItems().add("AUD");
+        currencyFromComboBox.getItems().add("CAD");
+        currencyFromComboBox.getItems().add("USD");
+        currencyFromComboBox.getItems().add("EUR");
+
+        //comboBoxTO choices
+        currencyToComboBox.getItems().add("AUD");
+        currencyToComboBox.getItems().add("CAD");
+        currencyToComboBox.getItems().add("USD");
+        currencyToComboBox.getItems().add("EUR");
+
         //make the button invisible until the user selects a currency
         //detailsButton.setVisible(false);
     }
@@ -65,14 +77,23 @@ public class ConverterViewContoller implements Initializable {
      */
     @FXML
     private void convert() throws IOException, InterruptedException { //convert button function
-        String finalAmount = amountTextField.getText();
-        int amount = Integer.parseInt(finalAmount);
+        String textAmount = amountTextField.getText();
+        int amount = Integer.parseInt(textAmount);
 
         //input api params
-        APIResponse apiResponse = APIUtility.getConverterFromRapidAPI(amount, currencyFromComboBox.getValue().toString(), currencyToComboBox.getValue().toString());
+        APIResponse apiResponse = APIUtility.getConverterFromRapidAPI(amount, currencyFromComboBox.getValue(), currencyToComboBox.getValue());
+        CountryCode countryCode = apiResponse.getRates();
+        Converter converter = countryCode.getCAD();
+
+
         if (apiResponse.resultsReturned()) {
             amountTextField.clear();
+            double rate = converter.getRate();
+            double newAmount = apiResponse.getAmount();
+            double finalAmount = newAmount * rate;
+            outputLabel.setText("Converted into: " + finalAmount);
             outputLabel.setVisible(true); //sets output label to visible
+
         }
         else
         {

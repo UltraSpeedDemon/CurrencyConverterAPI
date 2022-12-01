@@ -22,6 +22,7 @@ public class APIUtility {
 
         HttpClient client = HttpClient.newHttpClient(); //client
         HttpRequest httpRequest = HttpRequest.newBuilder()
+                //.uri(URI.create("https://currency-converter5.p.rapidapi.com/currency/convert?format=json&from=USD&to=CASD&amount=20")) //TEST
                 .uri(URI.create("https://currency-converter5.p.rapidapi.com/currency/convert?format=json&from="+currencyFrom+"&to="+currencyTo+"&amount="+amount)) //uri ** CHANGE AUD, CAD, 1 as variables
                 .header("X-RapidAPI-Key", "522e680d0cmsh846c9955ff01059p1bb5f4jsnaa88a71355c7") //api Key
                 .header("X-RapidAPI-Host", "currency-converter5.p.rapidapi.com") //api host

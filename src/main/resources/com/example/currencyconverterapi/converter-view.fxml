@@ -16,7 +16,7 @@
             <Label fx:id="outputLabel" text="OutputLabel" BorderPane.alignment="CENTER" />
          </bottom>
       </BorderPane>
-      <BorderPane layoutY="25.0" prefHeight="365.0" prefWidth="600.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+      <BorderPane fx:id="exchangePane" layoutY="25.0" prefHeight="365.0" prefWidth="600.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
          <bottom>
             <Button fx:id="detailsButton" mnemonicParsing="false" onAction="#viewDetails" text="Exchange Details" BorderPane.alignment="CENTER" />
          </bottom></BorderPane>

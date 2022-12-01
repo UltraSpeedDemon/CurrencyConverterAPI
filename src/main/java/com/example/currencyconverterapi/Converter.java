@@ -7,18 +7,14 @@ public class Converter {
         @SerializedName("base_currency_name")
         private String base_currency_name;
 
-        @SerializedName("amount")
-        private int amount;
-
         @SerializedName("currency_name")
         private String currency_name;
 
         @SerializedName("rate")
-        private int rate;
+        private double rate;
 
-        public Converter(String base_currency_name, int amount, String currency_name, int rate) {
+        public Converter(String base_currency_name, String currency_name, double rate) {
             setBase_currency_name(base_currency_name);
-            setAmount(amount);
             setCurrency_name(currency_name);
             setRate(rate);
         }
@@ -38,20 +34,6 @@ public class Converter {
         }
     }
 
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) { //validation
-        if (amount>=0){
-            this.amount = amount;
-        }
-        else
-        {
-            throw new IllegalArgumentException("Amount must be greater than 0");
-        }
-    }
-
     public String getCurrency_name() {
         return currency_name;
     }
@@ -67,11 +49,11 @@ public class Converter {
         }
     }
 
-    public int getRate() {
+    public double getRate() {
         return rate;
     }
 
-    public void setRate(int rate) { //validation
+    public void setRate(double rate) { //validation
         if(rate>=0)
         {
             this.rate = rate;
@@ -80,16 +62,6 @@ public class Converter {
         {
             throw new IllegalArgumentException("Rate must be greater than 0");
         }
-    }
-
-    /**
-     *  This method will return the converted amount
-     * @return
-     */
-    //returns finalAmount after the exchange
-    public int getFinalAmount() {
-        int finalAmount = amount * rate;
-        return finalAmount;
     }
 
 }
