@@ -55,21 +55,25 @@ public class ConverterViewContoller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         outputLabel.setVisible(false); //makes the output label invisible until the user clicks the convert button
+        detailsButton.setVisible(false); //makes the convert button invisible until the user selects a currency from the combobox
 
         //comboboxFROM choices
         currencyFromComboBox.getItems().add("AUD");
         currencyFromComboBox.getItems().add("CAD");
         currencyFromComboBox.getItems().add("USD");
         currencyFromComboBox.getItems().add("EUR");
+        currencyFromComboBox.getItems().add("GBP");
 
         //comboBoxTO choices
         currencyToComboBox.getItems().add("AUD");
         currencyToComboBox.getItems().add("CAD");
         currencyToComboBox.getItems().add("USD");
         currencyToComboBox.getItems().add("EUR");
+        currencyToComboBox.getItems().add("GBP");
 
         //make the button invisible until the user selects a currency
         //detailsButton.setVisible(false);
+
     }
 
     /**
@@ -77,28 +81,43 @@ public class ConverterViewContoller implements Initializable {
      */
     @FXML
     private void convert() throws IOException, InterruptedException { //convert button function
+
         String textAmount = amountTextField.getText();
-        int amount = Integer.parseInt(textAmount);
 
-        //input api params
-        APIResponse apiResponse = APIUtility.getConverterFromRapidAPI(amount, currencyFromComboBox.getValue(), currencyToComboBox.getValue());
-        CountryCode countryCode = apiResponse.getRates();
-        Converter converter = countryCode.getCAD();
-
-
-        if (apiResponse.resultsReturned()) {
-            amountTextField.clear();
-            double rate = converter.getRate();
-            double newAmount = apiResponse.getAmount();
-            double finalAmount = newAmount * rate;
-            outputLabel.setText("Converted into: " + finalAmount);
-            outputLabel.setVisible(true); //sets output label to visible
-
+        try{
+           Double.parseDouble(textAmount);
         }
-        else
-        {
-            outputLabel.setVisible(false);
-            amountTextField.clear();
+        catch (NumberFormatException e){
+            outputLabel.setText("Please enter a valid number");
+            outputLabel.setVisible(true);
+            return;
+        }
+
+        if(textAmount.isBlank() || textAmount.trim().isEmpty()) { //if the user enters a negative number or nothing, the program will not run
+            outputLabel.setText("No results found");
+            outputLabel.setVisible(true);
+        }
+        else {
+            int amount = Integer.parseInt(textAmount);
+            //input api params
+            APIResponse apiResponse = APIUtility.getConverterFromRapidAPI(amount, currencyFromComboBox.getValue(), currencyToComboBox.getValue());
+            CountryCode countryCode = apiResponse.getRates();
+            Converter converter = countryCode.allCountryCodes(currencyToComboBox.getValue());
+
+
+            if (apiResponse.resultsReturned()) {
+                amountTextField.clear();
+                double rate = converter.getRate();
+                double newAmount = apiResponse.getAmount();
+                double finalAmount = newAmount * rate;
+                outputLabel.setText("Converted into: $" + finalAmount);
+                outputLabel.setVisible(true); //sets output label to visible
+                detailsButton.setVisible(true); //makes the convert button invisible until the user selects a currency from the combobox
+            } else {
+                outputLabel.setText("No results found");
+                outputLabel.setVisible(false);
+                amountTextField.clear();
+            }
         }
     }
 }

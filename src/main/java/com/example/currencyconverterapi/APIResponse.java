@@ -6,8 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class APIResponse {
-    private String totalResults;
-
     @SerializedName("status")
     private String status;
 
@@ -20,34 +18,22 @@ public class APIResponse {
     @SerializedName("amount")
     private double amount;
 
-    public String getError()
-    {
+    public String getError() {
         return error;
     }
 
-    public boolean resultsReturned()
-    {
-        if (status.equals("success"))
-        {
+    public boolean resultsReturned() {
+        if (status.equals("success")) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
-    public APIResponse(String totalResults, String status) {
-        setTotalResults(totalResults);
+    public APIResponse(String status, CountryCode rates, double amount) {
         setStatus(status);
-    }
-
-    public String getTotalResults() {
-        return totalResults;
-    }
-
-    public void setTotalResults(String totalResults) {
-        this.totalResults = totalResults;
+        setRates(rates);
+        setAmount(amount);
     }
 
     public String getStatus() {
@@ -63,7 +49,11 @@ public class APIResponse {
     }
 
     public void setRates(CountryCode rates) {
-        this.rates = rates;
+        if (rates != null) {
+            this.rates = rates;
+        } else {
+            throw new IllegalArgumentException("Invalid rates");
+        }
     }
 
     public double getAmount() {
@@ -71,16 +61,10 @@ public class APIResponse {
     }
 
     public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    public String toString()
-    {
-        return "APIResponse{" +
-                "totalResults='" + totalResults + '\'' +
-                ", status='" + status + '\'' +
-                ", error='" + error + '\'' +
-                ", rates=" + rates +
-                '}';
+        if (amount > 0) {
+            this.amount = amount;
+        } else {
+            throw new IllegalArgumentException("Invalid amount");
+        }
     }
 }
