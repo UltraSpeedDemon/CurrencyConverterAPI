@@ -80,10 +80,9 @@ public class ConverterViewContoller implements Initializable {
     private void convert() throws IOException, InterruptedException { //convert button function
 
         String textAmount = amountTextField.getText();
-        int amount2 = Integer.parseInt(textAmount);
 
         try{
-           Double.parseDouble(textAmount);
+            Double.parseDouble(textAmount);
         }
         catch (NumberFormatException e){
             outputLabel.setText("Please enter a valid number");
@@ -91,34 +90,39 @@ public class ConverterViewContoller implements Initializable {
             return;
         }
 
-        if(textAmount.isBlank() || textAmount.trim().isEmpty() || amount2 < 0 || amount2 > 100000) { //if the user enters a negative number or nothing, the program will not run
+        if(textAmount.isBlank() || textAmount.trim().isEmpty()) { //if the user enters a negative number or nothing, the program will not run
             outputLabel.setText("No results found");
             outputLabel.setVisible(true);
         }
         else {
-            int amount = Integer.parseInt(textAmount);
-            //input api params
-            APIResponse apiResponse = APIUtility.getConverterFromRapidAPI(amount, currencyFromComboBox.getValue(), currencyToComboBox.getValue());
-            CountryCode countryCode = apiResponse.getRates();
-
-            if(countryCode == null) {
-                outputLabel.setText("Please choose a Country's Currency");
-                outputLabel.setVisible(true);
+            int amount2 = Integer.parseInt(textAmount);
+            if (amount2 < 0 || amount2 > 100000){
+                outputLabel.setText("No results found");
             }
             else {
-                Converter converter = countryCode.allCountryCodes(currencyToComboBox.getValue());
+                int amount = Integer.parseInt(textAmount);
+                //input api params
+                APIResponse apiResponse = APIUtility.getConverterFromRapidAPI(amount, currencyFromComboBox.getValue(), currencyToComboBox.getValue());
+                CountryCode countryCode = apiResponse.getRates();
 
-                if (apiResponse.resultsReturned()) {
-                    double rate = converter.getRate();
-                    double newAmount = apiResponse.getAmount();
-                    double finalAmount = newAmount * rate;
-                    outputLabel.setText("Converted into: $" + finalAmount);
-                    outputLabel.setVisible(true); //sets output label to visible
-                    detailsButton.setVisible(true); //makes the convert button invisible until the user selects a currency from the combobox
+                if (countryCode == null) {
+                    outputLabel.setText("Please choose a Country's Currency");
+                    outputLabel.setVisible(true);
                 } else {
-                    outputLabel.setText("No results found");
-                    outputLabel.setVisible(false);
-                    amountTextField.clear();
+                    Converter converter = countryCode.allCountryCodes(currencyToComboBox.getValue());
+
+                    if (apiResponse.resultsReturned()) {
+                        double rate = converter.getRate();
+                        double newAmount = apiResponse.getAmount();
+                        double finalAmount = newAmount * rate;
+                        outputLabel.setText("Converted into: $" + finalAmount);
+                        outputLabel.setVisible(true); //sets output label to visible
+                        detailsButton.setVisible(true); //makes the convert button invisible until the user selects a currency from the combobox
+                    } else {
+                        outputLabel.setText("No results found");
+                        outputLabel.setVisible(false);
+                        amountTextField.clear();
+                    }
                 }
             }
         }
