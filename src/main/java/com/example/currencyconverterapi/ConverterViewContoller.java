@@ -45,11 +45,8 @@ public class ConverterViewContoller implements Initializable {
     private BorderPane exchangePane;
 
     @FXML
-    void viewDetails(ActionEvent event) throws IOException { //view details button to switch scenes
-        Parent root = FXMLLoader.load(getClass().getResource("exchangedetails-view.fxml"));
-
-        Stage window = (Stage) detailsButton.getScene().getWindow();
-        window.setScene(new Scene(root)); //no size
+    void viewDetails(ActionEvent event) throws IOException, InterruptedException { //view details button to switch scenes
+        SceneChanger.changeScenes(event,"exchangedetails-view.fxml", Integer.valueOf(amountTextField.getText()), currencyFromComboBox.getValue(), currencyToComboBox.getValue());
     }
 
     @Override
@@ -83,6 +80,7 @@ public class ConverterViewContoller implements Initializable {
     private void convert() throws IOException, InterruptedException { //convert button function
 
         String textAmount = amountTextField.getText();
+        int amount2 = Integer.parseInt(textAmount);
 
         try{
            Double.parseDouble(textAmount);
@@ -93,7 +91,7 @@ public class ConverterViewContoller implements Initializable {
             return;
         }
 
-        if(textAmount.isBlank() || textAmount.trim().isEmpty()) { //if the user enters a negative number or nothing, the program will not run
+        if(textAmount.isBlank() || textAmount.trim().isEmpty() || amount2 < 0 || amount2 > 100000) { //if the user enters a negative number or nothing, the program will not run
             outputLabel.setText("No results found");
             outputLabel.setVisible(true);
         }
@@ -102,21 +100,26 @@ public class ConverterViewContoller implements Initializable {
             //input api params
             APIResponse apiResponse = APIUtility.getConverterFromRapidAPI(amount, currencyFromComboBox.getValue(), currencyToComboBox.getValue());
             CountryCode countryCode = apiResponse.getRates();
-            Converter converter = countryCode.allCountryCodes(currencyToComboBox.getValue());
 
+            if(countryCode == null) {
+                outputLabel.setText("Please choose a Country's Currency");
+                outputLabel.setVisible(true);
+            }
+            else {
+                Converter converter = countryCode.allCountryCodes(currencyToComboBox.getValue());
 
-            if (apiResponse.resultsReturned()) {
-                amountTextField.clear();
-                double rate = converter.getRate();
-                double newAmount = apiResponse.getAmount();
-                double finalAmount = newAmount * rate;
-                outputLabel.setText("Converted into: $" + finalAmount);
-                outputLabel.setVisible(true); //sets output label to visible
-                detailsButton.setVisible(true); //makes the convert button invisible until the user selects a currency from the combobox
-            } else {
-                outputLabel.setText("No results found");
-                outputLabel.setVisible(false);
-                amountTextField.clear();
+                if (apiResponse.resultsReturned()) {
+                    double rate = converter.getRate();
+                    double newAmount = apiResponse.getAmount();
+                    double finalAmount = newAmount * rate;
+                    outputLabel.setText("Converted into: $" + finalAmount);
+                    outputLabel.setVisible(true); //sets output label to visible
+                    detailsButton.setVisible(true); //makes the convert button invisible until the user selects a currency from the combobox
+                } else {
+                    outputLabel.setText("No results found");
+                    outputLabel.setVisible(false);
+                    amountTextField.clear();
+                }
             }
         }
     }

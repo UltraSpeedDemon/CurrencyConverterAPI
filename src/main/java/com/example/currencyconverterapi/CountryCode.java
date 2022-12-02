@@ -19,6 +19,8 @@ public class CountryCode {
     @SerializedName("GBP")
     private Converter GBP;
 
+    private String error = "Invalid country code";
+
     public CountryCode(Converter CAD, Converter USD, Converter EUR, Converter AUD, Converter GBP) {
         setCAD(CAD);
         setUSD(USD);

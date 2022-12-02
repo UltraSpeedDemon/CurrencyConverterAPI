@@ -11,8 +11,10 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class ExchangeDetailsController implements Initializable {
+public class ExchangeDetailsController {
 
     @FXML
     private Label amountLabel;
@@ -34,13 +36,30 @@ public class ExchangeDetailsController implements Initializable {
         window.setScene(new Scene(root)); //no size
     }
 
-    @Override
-    public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
+    public void getConverterDetails(int amount, String currencyFrom, String currencyTo) throws IOException, InterruptedException {
         amountLabel.setVisible(false);
         rateLabel.setVisible(false);
         totalLabel.setVisible(false);
 
-        if(amountLabel.getText().isEmpty() || amountLabel.getText().isEmpty() || rateLabel.getText().isEmpty() || totalLabel.getText().isEmpty()){
+        //validation
+        amountLabel.setText("");
+        rateLabel.setText("");
+        totalLabel.setText("");
+
+        APIResponse apiResponse = APIUtility.getConverterFromRapidAPI(amount, currencyFrom, currencyTo);
+        CountryCode countryCode = apiResponse.getRates();
+        Converter converter = countryCode.allCountryCodes(currencyTo);
+
+        double rate2 = converter.getRate();
+
+        double finalAmount = amount * rate2;
+
+        amountLabel.setText(String.valueOf(amount));
+        rateLabel.setText(String.valueOf(rate2));
+        totalLabel.setText(String.valueOf(finalAmount));
+
+
+        if(amountLabel.getText().isBlank() || rateLabel.getText().isBlank() || totalLabel.getText().isBlank()){
             amountLabel.setText("Invalid");
             rateLabel.setText("Invalid");
             totalLabel.setText("Invalid");
@@ -48,11 +67,11 @@ public class ExchangeDetailsController implements Initializable {
             rateLabel.setVisible(true);
             totalLabel.setVisible(true);
         }
-        //amountLabel.setText(ConverterViewContoller.amount);
-        //amountLabel2.setText(ConverterViewContoller.amount);
-        //rateLabel.setText(ConverterViewContoller.rate);
-        //rateLabel2.setText(ConverterViewContoller.rate);
-        //totalLabel.setText(ConverterViewContoller.total);
+        else {
+            amountLabel.setVisible(true);
+            rateLabel.setVisible(true);
+            totalLabel.setVisible(true);
+        }
     }
 }
 
